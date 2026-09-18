@@ -1,7 +1,7 @@
 yt-dlp>=2024.08.06
 curl-cffi
 pyrofork
-pytgcalls
+git+https://github.com/pytgcalls/pytgcalls.git
 motor
 pymongo
 dnspython
