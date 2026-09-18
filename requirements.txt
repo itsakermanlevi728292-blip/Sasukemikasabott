@@ -1,0 +1,14 @@
+git+https://github.com/yt-dlp/yt-dlp.git
+curl-cffi
+pyrofork
+pytgcalls==0.8.0
+motor
+pymongo
+dnspython
+asyncio
+aiofiles
+aiohttp
+requests
+pillow
+psutil
+speedtest-cli
