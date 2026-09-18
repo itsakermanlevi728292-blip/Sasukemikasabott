@@ -13,3 +13,8 @@ pillow
 psutil
 speedtest-cli
 uvloop
+python-dotenv
+tgcrypto
+pytgcalls
+google-api-python-client
+isodate
