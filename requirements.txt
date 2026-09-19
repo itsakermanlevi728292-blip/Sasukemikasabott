@@ -19,3 +19,4 @@ SafoneAPI
 GitPython
 heroku3
 beautifulsoup4
+py-yt-search
