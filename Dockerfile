@@ -1,14 +1,15 @@
-FROM nikolaik/python-nodejs:python3.10-nodejs20
+FROM python:3.10-slim-buster
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ffmpeg \
-    && apt-get clean \
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    git \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY . .
 
-RUN pip3 install --no-cache-dir --upgrade pip \
-    && pip3 install --no-cache-dir --upgrade -r requirements.txt
+RUN pip3 install --no-cache-dir --upgrade pip
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-CMD bash start
+CMD ["python3", "-m", "SHUKLAMUSIC"]
