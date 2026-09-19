@@ -1,11 +1,10 @@
 yt-dlp>=2024.08.06
 curl-cffi
 pyrofork
-git+https://github.com/pytgcalls/pytgcalls.git
+pytgcalls
 motor
 pymongo
 dnspython
-asyncio
 aiofiles
 aiohttp
 requests
