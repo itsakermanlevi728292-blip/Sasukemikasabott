@@ -16,4 +16,3 @@ tgcrypto
 google-api-python-client
 isodate
 SafoneAPI
-py_yt
