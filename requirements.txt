@@ -14,7 +14,6 @@ psutil
 speedtest-cli
 python-dotenv
 tgcrypto
-pytgcalls
 google-api-python-client
 isodate
 SafoneAPI
