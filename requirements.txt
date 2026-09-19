@@ -1,7 +1,7 @@
 yt-dlp
 curl-cffi
 pyrofork
-pytgcalls
+py-tgcalls
 motor
 pymongo
 dnspython
