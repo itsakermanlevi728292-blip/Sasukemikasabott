@@ -18,3 +18,4 @@ isodate
 SafoneAPI
 GitPython
 heroku3
+beautifulsoup4
