@@ -21,3 +21,4 @@ heroku3
 beautifulsoup4
 py-yt-search
 PyYAML
+spotipy
