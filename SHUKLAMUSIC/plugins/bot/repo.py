@@ -1,5 +1,4 @@
 from pyrogram import filters
-from pyrogram.enums import ButtonStyle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from SHUKLAMUSIC import app
 from config import BOT_USERNAME
@@ -41,22 +40,16 @@ async def start(_, msg):
             InlineKeyboardButton(
                 text="˹sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ˼",
                 url="https://t.me/+ZEX3YHRTy-swNDll",
-                style=ButtonStyle.PRIMARY,
-                icon_custom_emoji_id=_E_STAR,
             ),
             InlineKeyboardButton(
                 text="˹ᴜᴩᴅᴀᴛᴇs˼",
                 url="https://t.me/ll_ABOUT_SASUKE_ll",
-                style=ButtonStyle.SUCCESS,
-                icon_custom_emoji_id=_E_FLOWER,
             ),
         ],
         [
             InlineKeyboardButton(
                 text="𝛅 ᥲ s 𝛖 𝛋 ᴇ ࿐",
                 url="https://t.me/sasuke_qt",
-                style=ButtonStyle.DANGER,
-                icon_custom_emoji_id=_E_GLOW,
             ),
         ],
     ]
@@ -66,4 +59,5 @@ async def start(_, msg):
         caption=start_txt,
         reply_markup=InlineKeyboardMarkup(buttons),
     )
-    
+
+            
