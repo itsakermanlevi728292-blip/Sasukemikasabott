@@ -28,8 +28,8 @@ BOT_TOKEN = getenv("BOT_TOKEN", "8886382041:AAF6XUy07JOd8Z5m5VpR5RmMEvMvetE5wF4"
 
 # Bot and owner info
 OWNER_USERNAME = getenv("OWNER_USERNAME", "@sasuke_qt")
-BOT_USERNAME = getenv("BOT_USERNAME", "@Mikasax_music_robot")
-BOT_NAME = getenv("BOT_NAME", "𝐌ɪᴋᴀsᴀ  ꭙ 𝐌ᴜꜱɪᴄ ♪˼")
+BOT_USERNAME = getenv("BOT_USERNAME", "@HinaVibesBot")
+BOT_NAME = getenv("BOT_NAME", "˹ ʜɪɴᴀ ꭙ ᴍᴜsɪᴄ ♡︎˼")
 ASSUSERNAME = getenv("ASSUSERNAME", "@sasuke_qt")
 
 # MongoDB
@@ -39,7 +39,7 @@ MONGO_DB_URI = getenv("MONGO_DB_URI", "mongodb+srv://Sasukeuchihabhai:SASUKEUCHI
 
 # Limits and IDs
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 17000))
-LOGGER_ID = int(getenv("LOGGER_ID", -1003785715622))
+LOGGER_ID = int(getenv("LOGGER_ID", -1004462188208))
 OWNER_ID = int(getenv("OWNER_ID", 8672927645))
 
 # Heroku
