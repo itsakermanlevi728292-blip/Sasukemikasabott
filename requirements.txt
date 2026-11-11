@@ -25,3 +25,4 @@ spotipy
 httpx
 youtube-search
 pyfiglet
+flask
