@@ -10,7 +10,8 @@
 # without prior written permission from the author.
 #
 # ❤️ Made with dedication and love by ItzShukla
-# -----------------------------------------------import os
+# -----------------------------------------------
+import os
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pydub import AudioSegment
@@ -80,4 +81,4 @@ def remove_media(client, message: Message):
             app.send_message(message.chat.id, "Please specify whether to remove audio or video using /remove audio or /remove video.")
     else:
         app.send_message(message.chat.id, "The replied message is not a video.")
-        
+
