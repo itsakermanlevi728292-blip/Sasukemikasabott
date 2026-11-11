@@ -29,3 +29,4 @@ flask
 qrcode
 pydub
 SpeechRecognition
+emojis
