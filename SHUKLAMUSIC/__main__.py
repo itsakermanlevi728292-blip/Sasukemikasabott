@@ -22,6 +22,24 @@ from SHUKLAMUSIC.misc import sudo
 from SHUKLAMUSIC.plugins import ALL_MODULES
 from SHUKLAMUSIC.utils.database import get_banned_users, get_gbanned
 
+# ---- Render ke liye chhota web server (port open rakhne ke liye) ----
+import os
+from threading import Thread
+from flask import Flask
+
+web_app = Flask(__name__)
+
+@web_app.route("/")
+def home():
+    return "Bot is running"
+
+def run_web():
+    port = int(os.environ.get("PORT", 10000))
+    web_app.run(host="0.0.0.0", port=port)
+
+Thread(target=run_web, daemon=True).start()
+# ---------------------------------------------------------------------
+
 async def init():
     if (
         not config.STRING1
