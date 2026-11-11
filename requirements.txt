@@ -27,3 +27,4 @@ youtube-search
 pyfiglet
 flask
 qrcode
+pydub
