@@ -24,3 +24,4 @@ PyYAML
 spotipy
 httpx
 youtube-search
+pyfiglet
