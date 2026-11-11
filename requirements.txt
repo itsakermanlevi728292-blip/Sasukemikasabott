@@ -30,3 +30,11 @@ qrcode
 pydub
 SpeechRecognition
 emojis
+pykeyboard
+pyshorteners
+gTTS
+wikipedia
+pytz
+telegraph
+unidecode
+lyricsgenius
