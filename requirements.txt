@@ -26,3 +26,4 @@ httpx
 youtube-search
 pyfiglet
 flask
+qrcode
