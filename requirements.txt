@@ -33,3 +33,4 @@ emojis
 apscheduler
 pytz
 pycountry
+gTTS
