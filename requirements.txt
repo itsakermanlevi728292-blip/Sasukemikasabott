@@ -32,3 +32,4 @@ SpeechRecognition
 emojis
 apscheduler
 pytz
+pycountry
