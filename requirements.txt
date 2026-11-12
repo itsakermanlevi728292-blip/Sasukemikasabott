@@ -34,3 +34,4 @@ apscheduler
 pytz
 pycountry
 gTTS
+unidecode
