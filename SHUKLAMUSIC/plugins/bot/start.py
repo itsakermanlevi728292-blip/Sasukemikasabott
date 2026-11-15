@@ -267,7 +267,7 @@ async def start_pm(client, message: Message, _):
         )
 
         await message.reply_video(
-            "https://files.catbox.moe/q4uzyp.mp4",
+            "https://files.catbox.moe/zrh3z9.mp4",
             caption=final_caption,
             reply_markup=InlineKeyboardMarkup(out),
         )
@@ -306,7 +306,7 @@ async def start_gp(client, message: Message, _):
     )
 
     await message.reply_video(
-        "https://files.catbox.moe/q4uzyp.mp4",
+        "https://files.catbox.moe/zrh3z9.mp4",
         caption=final_caption,
         reply_markup=InlineKeyboardMarkup(out),
     )
@@ -360,7 +360,7 @@ async def welcome(client, message: Message):
                 )
 
                 await message.reply_video(
-                    "https://files.catbox.moe/q4uzyp.mp4",
+                    "https://files.catbox.moe/zrh3z9.mp4",
                     caption=final_caption,
                     reply_markup=InlineKeyboardMarkup(out),
                 )
