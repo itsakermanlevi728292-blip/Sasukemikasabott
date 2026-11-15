@@ -38,7 +38,8 @@ py-yt-search
 pyshorteners
 pyttsx3
 pytz
-py-tgcalls==0.9.7
+py-tgcalls>=2.2.0
+ntgcalls
 pyyaml
 qrcode
 rapidfuzz
