@@ -35,6 +35,9 @@ from SHUKLAMUSIC.utils.database import (
     remove_active_video_chat,
     set_loop,
 )
+from SHUKLAMUSIC.utils.autoplay import fetch_autoplay_track, remember_played
+from SHUKLAMUSIC.utils.autoplay_db import is_autoplay_on
+from SHUKLAMUSIC.utils.stream.queue import put_queue
 from SHUKLAMUSIC.utils.exceptions import AssistantErr
 from SHUKLAMUSIC.utils.formatters import check_duration, seconds_to_min, speed_converter
 from SHUKLAMUSIC.utils.inline.play import stream_markup
@@ -263,6 +266,106 @@ class Call(PyTgCalls):
         )
         await self._play_on_assistant(assistant, chat_id, stream)
 
+    async def autoplay_start(
+        self,
+        chat_id: int,
+        original_chat_id: int,
+        seed_title: str,
+        seed_vidid: str = None,
+        client: PyTgCalls = None,
+    ) -> bool:
+        """
+        Queue khatam hone par call hota hai. Last gaane ke related gaane me se
+        random (pehle na chala hua) gaana chalata hai. True = chal gaya,
+        False = nahi mila (caller normal tareeke se call chhod dega).
+        """
+        if seed_vidid:
+            remember_played(chat_id, seed_vidid)
+
+        status_msg = None
+        try:
+            status_msg = await app.send_message(
+                original_chat_id,
+                "ʜσʟᴅ ση...\n\nᴅσᴡηʟσᴧᴅɪηɢ ηєxᴛ ϻєᴅɪᴧ ғʀσϻ ᴛʜє ǫυєυє.",
+            )
+        except Exception:
+            status_msg = None
+
+        async def _fail() -> bool:
+            if status_msg:
+                try:
+                    await status_msg.delete()
+                except Exception:
+                    pass
+            return False
+
+        track = await fetch_autoplay_track(chat_id, seed_title, seed_vidid)
+        if not track:
+            return await _fail()
+
+        language = await get_lang(chat_id)
+        _ = get_string(language)
+
+        try:
+            file_path, direct = await YouTube.download(
+                track["vidid"], None, videoid=True
+            )
+        except Exception:
+            return await _fail()
+        if not file_path:
+            return await _fail()
+
+        remember_played(chat_id, track["vidid"])
+        title = track["title"].title()
+        duration_min = track["duration_min"]
+
+        await put_queue(
+            chat_id,
+            original_chat_id,
+            file_path if direct else f"vid_{track['vidid']}",
+            title,
+            duration_min,
+            "🔁 ᴀᴜᴛᴏᴘʟᴀʏ",
+            track["vidid"],
+            1,
+            "audio",
+            forceplay=True,
+        )
+
+        stream = self._build_stream(file_path, video=False)
+        assistant = client or await group_assistant(self, chat_id)
+        try:
+            await self._play_on_assistant(assistant, chat_id, stream)
+        except Exception:
+            return await _fail()
+
+        try:
+            img = await gen_thumb(track["vidid"])
+            button = stream_markup(_, chat_id)
+            run = await app.send_photo(
+                chat_id=original_chat_id,
+                photo=img,
+                caption=_["stream_1"].format(
+                    f"https://t.me/{app.username}?start=info_{track['vidid']}",
+                    title[:23],
+                    duration_min,
+                    "ᴀᴜᴛᴏᴘʟᴀʏ 🎧",
+                ),
+                reply_markup=InlineKeyboardMarkup(button),
+            )
+            db[chat_id][0]["mystic"] = run
+            db[chat_id][0]["markup"] = "stream"
+        except Exception:
+            pass
+
+        if status_msg:
+            try:
+                await status_msg.delete()
+            except Exception:
+                pass
+
+        return True
+
     async def stream_call(self, link):
         assistant = await group_assistant(self, config.LOG_GROUP_ID)
         stream = self._build_stream(link, video=True)
@@ -317,6 +420,16 @@ class Call(PyTgCalls):
                 await set_loop(chat_id, loop)
             await auto_clean(popped)
             if not check:
+                if popped and await is_autoplay_on(chat_id):
+                    started = await self.autoplay_start(
+                        chat_id,
+                        popped.get("chat_id", chat_id),
+                        popped.get("title"),
+                        popped.get("vidid"),
+                        client=client,
+                    )
+                    if started:
+                        return
                 await _clear_(chat_id)
                 return await client.leave_call(chat_id, close=False)
         except Exception:
