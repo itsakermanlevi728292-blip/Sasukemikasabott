@@ -16,14 +16,34 @@ from pyrogram.types import InlineKeyboardButton
 import config
 from SHUKLAMUSIC import app
 
+# Coloured buttons need a Pyrogram version that knows ButtonStyle (Kurigram, PyroTGFork...).
+# On an older Pyrogram the buttons simply stay grey and the bot keeps working.
+try:
+    from pyrogram.enums import ButtonStyle
+except ImportError:
+    ButtonStyle = None
+
+
+def _btn(color=None, **kwargs):
+    """color: "GREEN", "RED" or "BLUE". Falls back to a normal button if the library can't colour it."""
+    names = {"GREEN": "SUCCESS", "RED": "DANGER", "BLUE": "PRIMARY"}
+    if color and ButtonStyle is not None:
+        try:
+            return InlineKeyboardButton(style=getattr(ButtonStyle, names[color]), **kwargs)
+        except (TypeError, AttributeError):
+            pass
+    return InlineKeyboardButton(**kwargs)
+
 
 def start_panel(_):
     buttons = [
         [
-            InlineKeyboardButton(
-                text=_["S_B_1"], url=f"https://t.me/{app.username}?startgroup=true"
+            _btn(
+                "GREEN",
+                text=_["S_B_1"],
+                url=f"https://t.me/{app.username}?startgroup=true",
             ),
-            InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_CHAT),
+            _btn("GREEN", text=_["S_B_2"], url=config.SUPPORT_CHAT),
         ],
     ]
     return buttons
@@ -32,20 +52,25 @@ def start_panel(_):
 def private_panel(_):
     buttons = [
         [
-            InlineKeyboardButton(
+            # Add me in your group: green
+            _btn(
+                "GREEN",
                 text=_["S_B_3"],
                 url=f"https://t.me/{app.username}?startgroup=true",
             )
         ],
         [
-            InlineKeyboardButton(text=_["S_B_5"], user_id=config.OWNER_ID),
-            InlineKeyboardButton(text=_["S_B_10"], callback_data="shiv_Shashank"),
+            # Owner: red, About: green
+            _btn("RED", text=_["S_B_5"], user_id=config.OWNER_ID),
+            _btn("GREEN", text=_["S_B_10"], callback_data="shiv_Shashank"),
         ],
         [
-            InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_CHAT),
-
-InlineKeyboardButton(text=_["S_B_6"], url=config.SUPPORT_CHANNEL),
+            # Support: green, Update: blue
+            _btn("GREEN", text=_["S_B_2"], url=config.SUPPORT_CHAT),
+            _btn("BLUE", text=_["S_B_6"], url=config.SUPPORT_CHANNEL),
         ],
-        [InlineKeyboardButton(text=_["S_B_4"], callback_data="settings_back_helper")],
+        # Help and commands: green
+        [_btn("GREEN", text=_["S_B_4"], callback_data="settings_back_helper")],
     ]
     return buttons
+    
