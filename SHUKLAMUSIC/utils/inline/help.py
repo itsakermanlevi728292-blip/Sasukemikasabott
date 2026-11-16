@@ -15,100 +15,49 @@ from typing import Union
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from SHUKLAMUSIC import app
 
+try:  # coloured buttons (same ButtonStyle that the broadcast buttons use)
+    from pyrogram.enums import ButtonStyle
+except ImportError:
+    try:
+        from pyrogram.types import ButtonStyle
+    except ImportError:
+        ButtonStyle = None
+
+# Colour pattern of every row of buttons, left to right: green, blue, red.
+# Names: SUCCESS = green, PRIMARY = blue, DANGER = red, None = normal (no colour).
+COLOR_PATTERN = ["SUCCESS", "PRIMARY", "DANGER"]
+
+
+def _btn(text, callback_data, color=None):
+    """A button with a colour. If this pyrogram version has no colour support, a normal button."""
+    style = getattr(ButtonStyle, color, None) if (ButtonStyle is not None and color) else None
+    if style is not None:
+        try:
+            return InlineKeyboardButton(text=text, callback_data=callback_data, style=style)
+        except TypeError:  # pyrogram version does not know "style"
+            pass
+    return InlineKeyboardButton(text=text, callback_data=callback_data)
+
 
 def help_pannel(_, START: Union[bool, int] = None):
     first = [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data=f"close")]
     second = [
-        InlineKeyboardButton(
-            text=_["BACK_PAGE"],
-            callback_data=f"mbot_cb",
-        ),
-        InlineKeyboardButton(
-            text=_["BACK_BUTTON"],
-            callback_data=f"settingsback_helper",
-        ),
-        InlineKeyboardButton(
-            text=_["NEXT_PAGE"],
-            callback_data=f"mbot_cb",
-        ),
+        _btn(_["BACK_PAGE"], "mbot_cb", COLOR_PATTERN[0]),
+        _btn(_["BACK_BUTTON"], "settingsback_helper", COLOR_PATTERN[1]),
+        _btn(_["NEXT_PAGE"], "mbot_cb", COLOR_PATTERN[2]),
     ]
     mark = second if START else first
-    upl = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(
-                    text=_["H_B_1"],
-                    callback_data="help_callback hb1",
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_2"],
-                    callback_data="help_callback hb2",
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_3"],
-                    callback_data="help_callback hb3",
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    text=_["H_B_4"],
-                    callback_data="help_callback hb4",
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_5"],
-                    callback_data="help_callback hb5",
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_6"],
-                    callback_data="help_callback hb6",
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    text=_["H_B_7"],
-                    callback_data="help_callback hb7",
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_8"],
-                    callback_data="help_callback hb8",
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_9"],
-                    callback_data="help_callback hb9",
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    text=_["H_B_10"],
-                    callback_data="help_callback hb10",
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_11"],
-                    callback_data="help_callback hb11",
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_12"],
-                    callback_data="help_callback hb12",
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    text=_["H_B_13"],
-                    callback_data="help_callback hb13",
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_14"],
-                    callback_data="help_callback hb14",
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_15"],
-                    callback_data="help_callback hb15",
-                ),
-            ],
-            mark,
-        ]
-    )
-    return upl
+
+    # 15 help buttons: 5 rows x 3 buttons. H_B_1 ... H_B_15, colours follow COLOR_PATTERN.
+    rows = []
+    for r in range(5):
+        row = []
+        for c in range(3):
+            n = r * 3 + c + 1
+            row.append(_btn(_[f"H_B_{n}"], f"help_callback hb{n}", COLOR_PATTERN[c]))
+        rows.append(row)
+    rows.append(mark)
+    return InlineKeyboardMarkup(rows)
 
 
 def help_back_markup(_):
@@ -135,3 +84,4 @@ def private_help_panel(_):
         ],
     ]
     return buttons
+    
