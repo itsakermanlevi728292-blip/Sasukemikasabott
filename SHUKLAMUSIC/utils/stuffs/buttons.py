@@ -12,20 +12,40 @@
 # ❤️ Made with dedication and love by ItzShukla
 # -----------------------------------------------
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
-from pyrogram import Client, filters, enums 
+from pyrogram import Client, filters, enums
+
+try:  # coloured buttons (same ButtonStyle that the broadcast buttons use)
+    from pyrogram.enums import ButtonStyle
+except ImportError:
+    try:
+        from pyrogram.types import ButtonStyle
+    except ImportError:
+        ButtonStyle = None
+
+# Colour pattern of every row of buttons, left to right: green, blue, red.
+# Names: SUCCESS = green, PRIMARY = blue, DANGER = red, None = normal (no colour).
+COLOR_PATTERN = ["SUCCESS", "PRIMARY", "DANGER"]
+
+
+def _btn(text, callback_data, color=None):
+    """A button with a colour. If this pyrogram version has no colour support, a normal button."""
+    style = getattr(ButtonStyle, color, None) if (ButtonStyle is not None and color) else None
+    if style is not None:
+        try:
+            return InlineKeyboardButton(text, callback_data=callback_data, style=style)
+        except TypeError:  # pyrogram version does not know "style"
+            pass
+    return InlineKeyboardButton(text, callback_data=callback_data)
+
 
 class BUTTONS(object):
-    MBUTTON = [[InlineKeyboardButton("ᴄʜᴀᴛ-ɢᴘᴛ", callback_data="mplus HELP_ChatGPT"),InlineKeyboardButton("ɢʀᴏᴜᴘs", callback_data="mplus HELP_Group"),InlineKeyboardButton("sᴛɪᴄᴋᴇʀs", callback_data="mplus HELP_Sticker")],
-    [InlineKeyboardButton("ᴛᴀɢ-ᴀʟʟ", callback_data="mplus HELP_TagAll"),
-    InlineKeyboardButton("ɪɴꜰᴏ", callback_data="mplus HELP_Info"),InlineKeyboardButton("ᴇxᴛʀᴀ", callback_data="mplus HELP_Extra")],
-    [InlineKeyboardButton("ɪᴍᴀɢᴇ", callback_data="mplus HELP_Image"),
-    InlineKeyboardButton("ᴀᴄᴛɪᴏɴ", callback_data="mplus HELP_Action"),InlineKeyboardButton("sᴇᴀʀᴄʜ", callback_data="mplus HELP_Search")],    
-    [InlineKeyboardButton("ғᴏɴᴛ", callback_data="mplus HELP_Font"),
-    InlineKeyboardButton("ɢᴀᴍᴇs", callback_data="mplus HELP_Game"),InlineKeyboardButton("ᴛ-ɢʀᴀᴘʜ", callback_data="mplus HELP_TG")],
-    [InlineKeyboardButton("ɪᴍᴘᴏsᴛᴇʀ", callback_data="mplus HELP_Imposter"),
-    InlineKeyboardButton("ᴛʀᴜᴛʜ-ᴅᴀʀᴇ", callback_data="mplus HELP_TD"),InlineKeyboardButton("ʜᴀsᴛᴀɢ", callback_data="mplus HELP_HT")], 
-    [InlineKeyboardButton("ᴛᴛs", callback_data="mplus HELP_TTS"),
-    InlineKeyboardButton("ғᴜɴ", callback_data="mplus HELP_Fun"),InlineKeyboardButton("ǫᴜᴏᴛʟʏ", callback_data="mplus HELP_Q")],          
-    [InlineKeyboardButton("◁", callback_data=f"settings_back_helper"), 
-    InlineKeyboardButton("▷", callback_data=f"managebot123 settings_back_helper"),
-    ]]
+    MBUTTON = [
+        [_btn("ᴄʜᴀᴛ-ɢᴘᴛ", "mplus HELP_ChatGPT", COLOR_PATTERN[0]), _btn("ɢʀᴏᴜᴘs", "mplus HELP_Group", COLOR_PATTERN[1]), _btn("sᴛɪᴄᴋᴇʀs", "mplus HELP_Sticker", COLOR_PATTERN[2])],
+        [_btn("ᴛᴀɢ-ᴀʟʟ", "mplus HELP_TagAll", COLOR_PATTERN[0]), _btn("ɪɴꜰᴏ", "mplus HELP_Info", COLOR_PATTERN[1]), _btn("ᴇxᴛʀᴀ", "mplus HELP_Extra", COLOR_PATTERN[2])],
+        [_btn("ɪᴍᴀɢᴇ", "mplus HELP_Image", COLOR_PATTERN[0]), _btn("ᴀᴄᴛɪᴏɴ", "mplus HELP_Action", COLOR_PATTERN[1]), _btn("sᴇᴀʀᴄʜ", "mplus HELP_Search", COLOR_PATTERN[2])],
+        [_btn("ғᴏɴᴛ", "mplus HELP_Font", COLOR_PATTERN[0]), _btn("ɢᴀᴍᴇs", "mplus HELP_Game", COLOR_PATTERN[1]), _btn("ᴛ-ɢʀᴀᴘʜ", "mplus HELP_TG", COLOR_PATTERN[2])],
+        [_btn("ɪᴍᴘᴏsᴛᴇʀ", "mplus HELP_Imposter", COLOR_PATTERN[0]), _btn("ᴛʀᴜᴛʜ-ᴅᴀʀᴇ", "mplus HELP_TD", COLOR_PATTERN[1]), _btn("ʜᴀsᴛᴀɢ", "mplus HELP_HT", COLOR_PATTERN[2])],
+        [_btn("ᴛᴛs", "mplus HELP_TTS", COLOR_PATTERN[0]), _btn("ғᴜɴ", "mplus HELP_Fun", COLOR_PATTERN[1]), _btn("ǫᴜᴏᴛʟʏ", "mplus HELP_Q", COLOR_PATTERN[2])],
+        [_btn("◁", f"settings_back_helper", COLOR_PATTERN[0]), _btn("▷", f"managebot123 settings_back_helper", COLOR_PATTERN[1])],
+    ]
+    
